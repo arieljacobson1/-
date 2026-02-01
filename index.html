@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="he">
+<head>
+<meta charset="UTF-8">
+<title>רק רציתי להגיד</title>
+
+<style>
+body{
+  margin:0;
+  background:#ececec;
+  font-family:Arial, sans-serif;
+  height:100vh;
+  overflow:hidden;
+}
+
+/* הכרטיס */
+.card{
+  background:#fff;
+  width:95%;
+  max-width:1100px;
+  height:600px;
+  margin:auto;
+  margin-top:calc(50vh - 300px);
+  display:flex;
+  border-radius:22px;
+  overflow:hidden;
+  box-shadow:0 15px 40px rgba(0,0,0,.2);
+  position:relative;
+}
+
+.text{
+  flex:1;
+  padding:50px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  text-align:right;
+}
+
+.text h1{
+  font-size:26px;
+  margin-bottom:40px;
+}
+
+/* כפתורים */
+.btn{
+  display:inline-block;
+  width:360px;              /* גודל קבוע, זהה לשניהם */
+  padding:18px 0;
+  font-size:18px;
+  border:none;
+  border-radius:999px;
+  cursor:pointer;
+  box-shadow:0 8px 20px rgba(0,0,0,.15);
+  text-align:center;
+}
+
+.yes{
+  background:#ff5c8a;
+  color:#fff;
+}
+
+/* הכפתור הבורח */
+.no{
+  background:#e6e6e6;
+  color:#222;
+  position:fixed;           /* חופשי בכל המסך */
+  z-index:9999;
+  transition:left .25s ease, top .25s ease; /* תנועה חלקה */
+}
+
+.image{
+  flex:1.3;
+  background-image:url('image.jpg');
+  background-size:cover;
+  background-position:center;
+}
+
+@media(max-width:800px){
+  .card{
+    flex-direction:column;
+    height:auto;
+    margin-top:40px;
+  }
+  .image{height:320px;}
+  .btn{width:100%;}
+}
+</style>
+</head>
+
+<body>
+
+<div class="card" id="card">
+  <div class="text">
+    <h1>רציתי להזכיר לך כמה יפה היית היום.</h1>
+
+    <button class="btn yes" id="yesBtn" onclick="yesClicked()">מסכימה בהחלט ❤️</button>
+  </div>
+
+  <div class="image"></div>
+</div>
+
+<!-- הכפתור הבורח -->
+<button class="btn no" id="noBtn">לא מסכימה 😕</button>
+
+<script>
+const noBtn  = document.getElementById("noBtn");
+const yesBtn = document.getElementById("yesBtn");
+
+/* מיקום התחלתי — סימטרי בדיוק מתחת ל"כן" */
+(function init(){
+  const r = yesBtn.getBoundingClientRect();
+  const left = r.left + (r.width - noBtn.offsetWidth) / 2;
+  const top  = r.top + r.height + 26; // מרווח אסתטי
+  noBtn.style.left = left + "px";
+  noBtn.style.top  = top  + "px";
+})();
+
+/* בריחה חופשית בכל המסך */
+function moveNo(){
+  const pad = 20;
+  const maxX = window.innerWidth  - noBtn.offsetWidth  - pad;
+  const maxY = window.innerHeight - noBtn.offsetHeight - pad;
+  const x = Math.random() * maxX;
+  const y = Math.random() * maxY;
+  noBtn.style.left = x + "px";
+  noBtn.style.top  = y + "px";
+}
+
+/* בורח כשמתקרבים (חלק) */
+noBtn.addEventListener("mouseenter", moveNo);
+noBtn.addEventListener("mouseover", moveNo);
+
+/* גם בטלפון */
+noBtn.addEventListener("touchstart", e=>{
+  e.preventDefault();
+  moveNo();
+},{passive:false});
+
+function yesClicked(){
+  document.body.innerHTML = `
+    <div style="
+      width:100vw;
+      height:100vh;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      text-align:center;
+      background:white;
+      font-family:Arial, sans-serif;
+    ">
+      <div>
+        <div style="font-size:40px;font-weight:600;">
+        כל הכבוד תשובה נכונה קיבלת 100 ❤️
+        </div>
+        <div style="margin-top:18px;font-size:22px;color:#777;">
+         
+        </div>
+      </div>
+    </div>
+  `;
+}
+</script>
+
+</body>
+</html>
